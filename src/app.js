@@ -1,12 +1,9 @@
 var TAG_TILE_MAP = 1;
 var TAG_PLAYER = 2;
 cc.TMXTiledMap.prototype.tilePosToScreenPos = function(posX, posY) {
-    // var x = this._tileSize.width / 2 * (this._mapSize.width - posX + posY);
     var x = this._tileSize.width / 2 * (this._mapSize.width + posX - posY);
-    // 16/2 * 10 - 0 + 2
-    // 8 * 10 + 2 = 82
     var y = this._tileSize.height * ( this._mapSize.height - (posX + posY) / 2);
-    var point = cc.p(x, y);
+    var point = cc.p(x, y - this._tileSize.height / 2 );
     return point;
 };
 
@@ -97,7 +94,7 @@ var GamePlayLayer = cc.Layer.extend({
         this.sprite.anchorY = 0;
 
 
-        if ('mouse' in cc.sys.capabilities)
+        if ('mouse' in cc.sys.capabilities) {
             cc.eventManager.addListener({
                 event: cc.EventListener.MOUSE,
                 onMouseDown: function(event){
@@ -140,11 +137,68 @@ var GamePlayLayer = cc.Layer.extend({
                     }
                 }
             }, this);
+        }
+
+        if ('keyboard' in cc.sys.capabilities) {
+            cc.eventManager.addListener({
+                event: cc.EventListener.KEYBOARD,
+                onKeyPressed: function (key, event) {
+                    var strTemp = "Key down:" + key;
+                    var keyStr = "";
+                    if (key == cc.KEY.none) {
+
+                    } else {
+                        for (var keyTemp in cc.KEY) {
+                            if (cc.KEY[keyTemp] == key) {
+                                var keyStr = keyTemp;
+                            }
+                        }
+                    }
+
+                    // var keyStr = self.getKeyStr(key);
+                    if (keyStr.length > 0) {
+                        strTemp += " the key name is:" + keyStr;
+                    }
+                    cc.log(strTemp);
+                },
+                onKeyReleased: function (key, event) {
+                    var strTemp = "Key up:" + key;
+                    var keyStr = "";
+                    if (key == cc.KEY.none) {
+
+                    } else {
+                        for (var keyTemp in cc.KEY) {
+                            if (cc.KEY[keyTemp] == key) {
+                                var keyStr = keyTemp;
+                            }
+                        }
+                    }
+                    if (keyStr.length > 0) {
+                        strTemp += " the key name is:" + keyStr;
+                    }
+                    cc.log(strTemp);
+                }
+            }, this);
+        } else {
+            cc.log("KEYBOARD Not supported");
+        }
 
         return true;
     },
-    onMouseDown: function () {
-        cc.log('click');
+    getKeyStr: function (keycode) {
+        if (keycode == cc.KEY.none)
+        {
+            return "";
+        }
+
+        for (var keyTemp in cc.KEY)
+        {
+            if (cc.KEY[keyTemp] == keycode)
+            {
+                return keyTemp;
+            }
+        }
+        return "";
     }
 });
 
