@@ -1,0 +1,18 @@
+[
+  {
+    "id": 101,
+    "player_id": 99,
+    "char_id": 0,
+    "equipped": true,
+    "slot": "body",
+    "skin": "sentinel"
+  },
+  {
+    "id": 105,
+    "player_id": 99,
+    "char_id": 0,
+    "equipped": true,
+    "slot": "main",
+    "skin": "alien_plasma_rifle"
+  }
+]

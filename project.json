@@ -13,6 +13,9 @@
 
     "jsList" : [
         "src/resource.js",
+        "src/game.js",
+        "src/scenes/area.js",
+        "src/scenes/hq.js",
         "src/app.js"
     ]
 }
