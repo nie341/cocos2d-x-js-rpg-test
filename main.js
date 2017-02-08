@@ -67,7 +67,7 @@ cc.game.onStart = function () {
     // cc.view.setOrientation(cc.ORIENTATION_PORTRAIT);
 
     // Setup the resolution policy and design resolution size
-    cc.view.setDesignResolutionSize(640, 480, cc.ResolutionPolicy.UNKNOWN);
+    cc.view.setDesignResolutionSize(1920, 1080, cc.ResolutionPolicy.UNKNOWN);
 
     // The game will be resized when browser size change
     // cc.view.resizeWithBrowserSize(true);

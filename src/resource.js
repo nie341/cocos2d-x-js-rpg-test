@@ -1,8 +1,8 @@
 var res = {
-    units_sentinel_weapon_alien_plasma_rifle_idle_png:  "res/units/armour.sentinel/weapon.AlienPlasmaRifle/idle.png",
-    units_sentinel_weapon_alien_plasma_rifle_idle_plist:  "res/units/armour.sentinel/weapon.AlienPlasmaRifle/idle.plist",
-    units_sentinel_weapon_alien_plasma_rifle_run_png:   "res/units/armour.sentinel/weapon.AlienPlasmaRifle/run.png",
-    units_sentinel_weapon_alien_plasma_rifle_run_plist: "res/units/armour.sentinel/weapon.AlienPlasmaRifle/run.plist",
+    units_sentinel_blue_weapon_alien_plasma_rifle_idle_png:  "res/units/sentinel_blue/alien_plasma_rifle/idle.png",
+    units_sentinel_blue_weapon_alien_plasma_rifle_idle_plist:  "res/units/sentinel_blue/alien_plasma_rifle/idle.plist",
+    units_sentinel_blue_weapon_alien_plasma_rifle_run_png:   "res/units/sentinel_blue/alien_plasma_rifle/run.png",
+    units_sentinel_blue_weapon_alien_plasma_rifle_run_plist: "res/units/sentinel_blue/alien_plasma_rifle/run.plist",
 
 
     tiles_ships_railings_railing_2tile_nw: "res/tiles/ships/railing/railing_2tile_nw.png",

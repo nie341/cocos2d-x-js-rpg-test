@@ -8,6 +8,7 @@ var GamePlayLayer = AreaMapLayer.extend({
 });
 
 var HQScene = cc.Scene.extend({
+// var HQScene = AreaScene.extend({
     onEnter:function () {
         this._super();
         var layer = new GamePlayLayer();
