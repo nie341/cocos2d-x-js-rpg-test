@@ -53,6 +53,7 @@ var AreaMapLayer = cc.Layer.extend({
                         && tilePosition.y >= 0
                     ) {
                         var tilePositionTarget = map.tilePosToScreenPos(tilePosition.x, tilePosition.y);
+                        //TODO try getPositionAt instead of tilePosToScreenPos
                         game.engine.characters[0].sprite.x = tilePositionTarget.x;
                         game.engine.characters[0].sprite.y = tilePositionTarget.y;
                         var floor = map.getLayer('FloorLayer');
@@ -134,13 +135,13 @@ var AreaMapLayer = cc.Layer.extend({
         var map = game.engine.area.map;
         map.addChild(game.engine.characters[id].sprite, map.children.length);
         game.engine.characters[id].sprite.attr({x:120, y:120});
-        var object = game.engine.area.spawning_points[n];
+        /*var object = game.engine.area.spawning_points[n];
 
         var tilePosition = map.ScreenPosToTilePos(object.x, object.y);
         cc.log("spawn tile");
         cc.log( tilePosition);
 
-        var spr = new cc.Sprite();
+        var spr = new cc.Sprite();*/
         // spr.x = object.x;
         // spr.y = object.y;
         // var worldPos = this.convertToWorldSpaceAR(spr.getPosition());
@@ -164,19 +165,51 @@ var AreaMapLayer = cc.Layer.extend({
         game.engine.characters[id].sprite.runAction(game.engine.characters[id].actions.run.e);
         this.spriteSheet.addChild(game.engine.characters[id].sprite);
 
-        this.setPosition(cc.p(spr.x,spr.y))
+        // this.setPosition(cc.p(spr.x,spr.y))
     },
     getSpawnPoints: function () {
         var map = game.engine.area.map;
+        var spawn_layer = map.getLayer("SpawnLayer");
+        spawn_layer.setVisible(false);
+        var tiles = spawn_layer.getTiles();
+        var ms = map.getMapSize();
+        var points = game.fn.area.getHardMap(tiles, ms.width);
+        cc.log(tiles);
+        cc.log(points);
+        /*
         game.engine.area.spawning_points = map.getObjectGroup('SpawnLayer').getObjects();
+
+        var drawNode = new cc.DrawNode();
+        drawNode.setLineWidth(3);
+        drawNode.setDrawColor(cc.color(0, 0, 255, 128));
+        this.addChild(drawNode);
+
+        var array = game.engine.area.spawning_points;
+        var dict;
+        for (var i = 0, len = array.length; i < len; i++) {
+            dict = array[i];
+            if (!dict)
+                break;
+            // for (var k in dict) {
+            //     cc.log(k + ' = ' + dict[k]);
+            // }
+
+            var x = dict["x"], y = dict["y"];
+            var width = dict["width"], height = dict["height"];
+
+            if (width != 0 && height != 0) {
+                drawNode.drawSegment(cc.p(x, y), cc.p((x + width), y));
+                drawNode.drawSegment(cc.p((x + width), y), cc.p((x + width), (y + height)));
+                drawNode.drawSegment(cc.p((x + width), (y + height)), cc.p(x, (y + height)));
+                drawNode.drawSegment(cc.p(x, (y + height)), cc.p(x, y));
+            }
+        }
 
         for (i in game.engine.area.spawning_points) {
             var sp = game.engine.area.spawning_points[i];
-            var draw = new cc.DrawNode();
-            this.addChild(draw, 11);
-            draw.drawDot(cc.p(sp.x, sp.y), 40, cc.color(0, 0, 255, 128));
+            drawNode.drawDot(cc.p(sp.x, sp.y), 40, cc.color(0, 0, 255, 128));
         }
-        cc.log(game.engine.area.spawning_points);
+        cc.log(game.engine.area.spawning_points);*/
     }
 });
 

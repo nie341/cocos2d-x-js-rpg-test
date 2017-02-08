@@ -72,6 +72,20 @@ var game = {
                     }
                     game.area = results[0];
                 });
+            },
+            getHardMap: function (tiles, map_width) {
+                var ret = [];
+                if (!tiles) {
+                    return ret;
+                }
+                for (var i=0;i<tiles.length;i++) {
+                    if (tiles[i] !== 0) {
+                        var obj = {x:0, y:0};
+                        //TODO get x, y from z and width
+                        ret.push(obj);
+                    }
+                }
+                return ret;
             }
         },
         items: {
