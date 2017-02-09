@@ -27,7 +27,8 @@ var game = {
     },
     engine: {
         area: {
-            map: null
+            map: null,
+            spawning_points: {}
         },
         characters: {},
         fn: {
@@ -80,8 +81,13 @@ var game = {
                 }
                 for (var i=0;i<tiles.length;i++) {
                     if (tiles[i] !== 0) {
-                        var obj = {x:0, y:0};
-                        //TODO get x, y from z and width
+                        var y = Math.floor( i / map_width);
+                        var x = i - y*map_width;
+                        var obj = {
+                            x:x, 
+                            y:y,
+                            gid: tiles[i]
+                        };
                         ret.push(obj);
                     }
                 }

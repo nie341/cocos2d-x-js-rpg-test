@@ -13,5 +13,9 @@ var HQScene = cc.Scene.extend({
         this._super();
         var layer = new GamePlayLayer();
         this.addChild(layer);
+
+        var keyboard_layer = new KeyboardLayer();
+        this.addChild(keyboard_layer);
+
     }
 });
