@@ -5,9 +5,11 @@ var game = {
     player: {},
     world: {},
     area: {
-        id: 0,
+        id: 0
     },
-    party: {},
+    party: {
+
+    },
     characters: {},
     items: {},
     rules: {
@@ -28,13 +30,51 @@ var game = {
     engine: {
         area: {
             map: null,
-            spawning_points: {}
+            spawning_points: {},
+
         },
         characters: {},
         fn: {
             characters: {
                 createSprite: function (id) {
                     game.engine.characters[id] = new cc.Sprite(res["units_" + game.characters[id].skin + "_idle_png"]);
+                },
+                moveSE: function (char_id) {
+                    game.engine.fn.characters.moveInDir(char_id, "se")
+                },
+                moveE: function (char_id) {
+                    game.engine.fn.characters.moveInDir(char_id, "e")
+                },
+                moveInDir: function(id, dir) {
+                    var map = game.engine.area.map;
+                    var char = game.characters[id];
+                    char.dir = dir;
+
+                    switch (dir) {
+                        case "e":
+                            game.characters[id].x++;
+                            game.characters[id].y--;
+                            break;
+                        case "se":
+                            game.characters[id].x++;
+                            // game.characters[id].y++;
+                            break;
+                    }
+
+                    var tilePositionTarget = map.tilePosToPixelPos(game.characters[id].x, game.characters[id].y);
+
+                    game.engine.characters[id].sprite.runAction(game.engine.characters[id].actions.run[dir]);
+                    var move = cc.moveTo(1.0, cc.p(tilePositionTarget.x, tilePositionTarget.y));
+
+                    var seq = cc.sequence(
+                        move
+                        ,cc.callFunc(function () {
+                            cc.log('Ended');
+                            game.engine.characters[id].sprite.stopAllActions();
+                            game.engine.characters[id].sprite.runAction(game.engine.characters[id].actions.idle[dir]);
+                        })
+                    );
+                    game.engine.characters[id].sprite.runAction(seq);
                 }
             }
         }

@@ -6,9 +6,9 @@ var AreaMapLayer = cc.Layer.extend({
 
     ctor:function () {
         this._super();
-        var self = this;
 
-        self.debug_mark_layer_center();
+        game.engine.area.map_layer = this;
+        this.debug_mark_layer_center();
 
         this.loadMap();
 
@@ -61,6 +61,10 @@ var AreaMapLayer = cc.Layer.extend({
         this.spriteSheet = new cc.SpriteBatchNode(res.units_sentinel_blue_weapon_alien_plasma_rifle_run_png);
         this.addChild(this.spriteSheet);
 
+        cc.spriteFrameCache.addSpriteFrames(res.units_sentinel_blue_weapon_alien_plasma_rifle_idle_plist);
+        this.spriteSheet = new cc.SpriteBatchNode(res.units_sentinel_blue_weapon_alien_plasma_rifle_idle_png);
+        this.addChild(this.spriteSheet);
+
         game.engine.characters[id] = {
             sprite: null,
             animations: {
@@ -81,7 +85,30 @@ var AreaMapLayer = cc.Layer.extend({
         }
 
         game.engine.characters[id].animations.run.e = new cc.Animation(animFrames, 0.1);
-        game.engine.characters[id].actions.run.e = new cc.RepeatForever(new cc.Animate(game.engine.characters[id].animations.run.e));
+        game.engine.characters[id].actions.run.e = new cc.RepeatForever(new cc.Animate(game.engine.characters[id].animations.run.e));        var animFrames = [];
+
+        for (var i = 0; i < 15; i++) {
+            var str = "run_se_" + i + ".png";
+            var frame = cc.spriteFrameCache.getSpriteFrame(str);
+            animFrames.push(frame);
+        }
+
+        game.engine.characters[id].animations.run.se = new cc.Animation(animFrames, 0.1);
+        game.engine.characters[id].actions.run.se = new cc.RepeatForever(new cc.Animate(game.engine.characters[id].animations.run.se));
+
+        var animFrames = [];
+        var str = "idle_se.png";
+        var frame = cc.spriteFrameCache.getSpriteFrame(str);
+        animFrames.push(frame);
+        game.engine.characters[id].animations.idle.se = new cc.Animation(animFrames, 1);
+        game.engine.characters[id].actions.idle.se = new cc.Repeat(new cc.Animate(game.engine.characters[id].animations.idle.se), 0);
+
+        var animFrames = [];
+        var str = "idle_e.png";
+        var frame = cc.spriteFrameCache.getSpriteFrame(str);
+        animFrames.push(frame);
+        game.engine.characters[id].animations.idle.e = new cc.Animation(animFrames, 1);
+        game.engine.characters[id].actions.idle.e = new cc.Repeat(new cc.Animate(game.engine.characters[id].animations.idle.e), 0);
 
         game.engine.characters[id].sprite = new cc.Sprite(res["units_" + game.characters[id].skin + "_idle_png"]);
         var map = game.engine.area.map;
@@ -91,16 +118,18 @@ var AreaMapLayer = cc.Layer.extend({
             width: 120,//TODO Get from skin
             height: 120,//TODO Get from skin
             anchorX: 0.5,
-            anchorY: 0
+            anchorY: 0.25
         });
 
         if (typeof game.engine.area.spawning_points[n] === "undefined") {
             return;
         }
         var spawning_point = game.engine.area.spawning_points[n];
-        spawning_point.map_pos = map.tilePosToScreenPos(spawning_point.x, spawning_point.y);
+        game.characters[id].x = spawning_point.x;
+        game.characters[id].y = spawning_point.y;
 
-        game.engine.characters[id].sprite.runAction(game.engine.characters[id].actions.run.e);
+        spawning_point.map_pos = map.tilePosToPixelPos(spawning_point.x, spawning_point.y);
+        game.engine.characters[id].sprite.runAction(game.engine.characters[id].actions.idle.se);
         this.spriteSheet.addChild(game.engine.characters[id].sprite);
         game.engine.characters[id].sprite.setPosition(cc.p(spawning_point.map_pos.x, spawning_point.map_pos.y));
     },
@@ -127,7 +156,7 @@ var AreaMapLayer = cc.Layer.extend({
                     var map_position = map.convertTouchToNodeSpace(event);
 
                     cc.log("Map node position" + map_position.x + ", " + map_position.y);
-                    var tilePosition = map.ScreenPosToTilePos(map_position.x, map_position.y);
+                    var tilePosition = map.PixelPosToTilePos(map_position.x, map_position.y);
                     cc.log( tilePosition);
 
                     // var tt = map.getLayer('FloorLayer').getTileAt(cc.p(tilePosition.x, tilePosition.y));
@@ -138,8 +167,8 @@ var AreaMapLayer = cc.Layer.extend({
                         && tilePosition.y < map.mapHeight
                         && tilePosition.y >= 0
                     ) {
-                        var tilePositionTarget = map.tilePosToScreenPos(tilePosition.x, tilePosition.y);
-                        //TODO try getPositionAt instead of tilePosToScreenPos
+                        var tilePositionTarget = map.tilePosToPixelPos(tilePosition.x, tilePosition.y);
+                        //TODO try getPositionAt instead of tilePosToPixelPos
                         // game.engine.characters[0].sprite.x = tilePositionTarget.x;
                         // game.engine.characters[0].sprite.y = tilePositionTarget.y;
                         var floor = map.getLayer('FloorLayer');
@@ -149,7 +178,7 @@ var AreaMapLayer = cc.Layer.extend({
                     }
 
 
-                    // var selectedPos = this.map.tilePosToScreenPos(tilePosition.x, tilePosition.y);
+                    // var selectedPos = this.map.tilePosToPixelPos(tilePosition.x, tilePosition.y);
                     // selectedPos.y -= this.map.getTileSize().height / 2;
                     // cc.log( selectedPos.x + ", " + selectedPos.y);
                 },
@@ -222,12 +251,15 @@ var KeyboardLayer = cc.Layer.extend({
                             break;
                         case cc.KEY.num3:
                             cc.log('move player SE');
+                            var id = game.player.selected_character_id;
+                            game.engine.fn.characters.moveSE(id);
                             break;
                         case cc.KEY.num4:
                             cc.log('move player W');
                             break;
                         case cc.KEY.num6:
-                            self.movePlayerE();
+                            var id = game.player.selected_character_id;
+                            game.engine.fn.characters.moveE(id);
                             break;
                         case cc.KEY.num7:
                             cc.log('move player NW');
@@ -263,21 +295,6 @@ var KeyboardLayer = cc.Layer.extend({
         }
 
         return true;
-    },
-
-    movePlayerE: function () {
-        cc.log('move player E');
-        var id = 0;
-        var map = game.engine.area.map;
-        //get tile x,y under the player
-        var tilePosition = map.ScreenPosToTilePos(game.engine.characters[id].sprite.x, game.engine.characters[id].sprite.y);
-        //get targeted screen position
-        var newTilePos = cc.p(tilePosition.x + 1, tilePosition.y);//moving one tile east
-        var tilePositionTarget = map.tilePosToScreenPos(newTilePos.x, newTilePos.y);
-        game.engine.characters[id].sprite.x = tilePositionTarget.x;
-        game.engine.characters[id].sprite.y = tilePositionTarget.y;
-        // cc.log( tilePosition);
-
     }
 });
 

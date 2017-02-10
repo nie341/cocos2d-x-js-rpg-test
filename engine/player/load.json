@@ -1,4 +1,5 @@
 {
   "id": 33,
-  "game_state": 0
+  "game_state": 0,
+  "selected_character_id": 0
 }

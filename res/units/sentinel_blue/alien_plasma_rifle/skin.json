@@ -1,0 +1,78 @@
+{
+  "attr": {
+    "width": 120,
+    "height": 120,
+    "anchorX": 0.5,
+    "anchorY": 0.25
+  },
+  "sprite_sheets": [
+    "res/units/sentinel_blue/alien_plasma_rifle/idle.png",
+    "res/units/sentinel_blue/alien_plasma_rifle/run.png"
+  ],
+  "plists": [
+    "res/units/sentinel_blue/alien_plasma_rifle/idle.plist",
+    "res/units/sentinel_blue/alien_plasma_rifle/run.plist"
+  ],
+  "actions": {
+    "idle": {
+      "attr": {
+        "repeat": false
+      },
+      "frames": {
+        "sw": ["idle_sw.png"],
+        "s": ["idle_s.png"],
+        "se": ["idle_se.png"],
+        "e": ["idle_e.png"],
+        "ne": ["idle_ne.png"],
+        "n": ["idle_n.png"],
+        "nw": ["idle_nw.png"],
+        "w": ["idle_w.png"]
+      }
+    },
+    "move": {
+      "attr": {
+        "repeat": true
+      },
+      "frames": {
+        "sw": [
+          "run_sw.png"
+        ],
+        "s": [
+          "run_s.png"
+        ],
+        "se": [
+          "run_se.png"
+        ],
+        "e": [
+          "run_e_0.png",
+          "run_e_1.png",
+          "run_e_2.png",
+          "run_e_3.png",
+          "run_e_4.png",
+          "run_e_5.png",
+          "run_e_6.png",
+          "run_e_7.png",
+          "run_e_8.png",
+          "run_e_9.png",
+          "run_e_10.png",
+          "run_e_11.png",
+          "run_e_12.png",
+          "run_e_13.png",
+          "run_e_14.png"
+        ],
+        "ne": [
+          "run_ne.png"
+        ],
+        "n": [
+          "run_n.png"
+        ],
+        "nw": [
+          "run_nw.png"
+        ],
+        "w": [
+          "run_w.png"
+        ]
+      }
+    }
+  }
+}
