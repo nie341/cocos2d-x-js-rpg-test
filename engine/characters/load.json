@@ -2,6 +2,8 @@
   {
     "id": 0,
     "dir": "se",
-    "skin": null
+    "skin": null,
+    "x": 10,
+    "y": 7
   }
 ]

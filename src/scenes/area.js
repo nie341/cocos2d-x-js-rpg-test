@@ -34,7 +34,7 @@ var AreaMapLayer = cc.Layer.extend({
         var map = game.engine.area.map;
 
         //hide meta layers
-        map.getLayer("SpawnLayer").setVisible(false);
+        map.getLayer("CillisionLayer").setVisible(false);
 
         // this.addChild(map, 0, TAG_TILE_MAP);
         var ms = map.getMapSize();
@@ -46,69 +46,43 @@ var AreaMapLayer = cc.Layer.extend({
     },
 
     loadCharacters: function () {
-        this.getSpawnPoints();
+        // this.getSpawnPoints();
 
         var n = 0;
         for (i in game.characters) {
-            this.loadCharacter(game.characters[i].id, n);
+            this.loadCharacter(game.characters[i].id);
             n++;
         }
     },
 
-    loadCharacter: function (id, n) {
-        // create sprite sheet
-        cc.spriteFrameCache.addSpriteFrames(res.units_sentinel_blue_weapon_alien_plasma_rifle_run_plist);
-        this.spriteSheet = new cc.SpriteBatchNode(res.units_sentinel_blue_weapon_alien_plasma_rifle_run_png);
-        this.addChild(this.spriteSheet);
+    loadCharacter: function (id) {
+        game.engine.characters[id] = cc.loader.getRes(res.units_sentinel_blue_weapon_alien_plasma_rifle_skin);
 
-        cc.spriteFrameCache.addSpriteFrames(res.units_sentinel_blue_weapon_alien_plasma_rifle_idle_plist);
-        this.spriteSheet = new cc.SpriteBatchNode(res.units_sentinel_blue_weapon_alien_plasma_rifle_idle_png);
-        this.addChild(this.spriteSheet);
+        for (action_name in game.engine.characters[id].actions) {
+            game.engine.characters[id].actions[action_name].animation = {};
+            game.engine.characters[id].actions[action_name].action = {};
+            var action = game.engine.characters[id].actions[action_name];
+            cc.spriteFrameCache.addSpriteFrames(action.plist);
+            var spriteSheet = new cc.SpriteBatchNode(action.sprite_sheet);
+            this.addChild(spriteSheet);
 
-        game.engine.characters[id] = {
-            sprite: null,
-            animations: {
-                idle: {},
-                run: {}
-            },
-            actions: {
-                idle: {},
-                run: {}
+            for (dir in action.frames) {
+                var frames_srcs = action.frames[dir];
+                var animFrames = [];
+                for (var i = 0; i < frames_srcs.length; i++) {
+                    var frame = cc.spriteFrameCache.getSpriteFrame(frames_srcs[i]);
+                    animFrames.push(frame);
+                }
+                var animation = new cc.Animation(animFrames, 0.1);
+                game.engine.characters[id].actions[action_name].animation[dir] = animation;
+                if (action.attr.repeat === true) {
+                    game.engine.characters[id].actions[action_name].action[dir] = new cc.RepeatForever(new cc.Animate(animation));
+                } else {
+                    game.engine.characters[id].actions[action_name].action[dir] = new cc.Animate(animation);
+                }
             }
-        };
 
-        var animFrames = [];
-        for (var i = 0; i < 15; i++) {
-            var str = "run_e_" + i + ".png";
-            var frame = cc.spriteFrameCache.getSpriteFrame(str);
-            animFrames.push(frame);
         }
-
-        game.engine.characters[id].animations.run.e = new cc.Animation(animFrames, 0.1);
-        game.engine.characters[id].actions.run.e = new cc.RepeatForever(new cc.Animate(game.engine.characters[id].animations.run.e));        var animFrames = [];
-
-        for (var i = 0; i < 15; i++) {
-            var str = "run_se_" + i + ".png";
-            var frame = cc.spriteFrameCache.getSpriteFrame(str);
-            animFrames.push(frame);
-        }
-
-        game.engine.characters[id].animations.run.se = new cc.Animation(animFrames, 0.1);
-        game.engine.characters[id].actions.run.se = new cc.RepeatForever(new cc.Animate(game.engine.characters[id].animations.run.se));
-
-        var animFrames = [];
-        var str = "idle_se.png";
-        var frame = cc.spriteFrameCache.getSpriteFrame(str);
-        animFrames.push(frame);
-        game.engine.characters[id].animations.idle.se = new cc.Animation(animFrames, 1);
-        game.engine.characters[id].actions.idle.se = new cc.Repeat(new cc.Animate(game.engine.characters[id].animations.idle.se), 0);
-
-        var animFrames = [];
-        var str = "idle_e.png";
-        var frame = cc.spriteFrameCache.getSpriteFrame(str);
-        animFrames.push(frame);
-        game.engine.characters[id].animations.idle.e = new cc.Animation(animFrames, 1);
-        game.engine.characters[id].actions.idle.e = new cc.Repeat(new cc.Animate(game.engine.characters[id].animations.idle.e), 0);
 
         game.engine.characters[id].sprite = new cc.Sprite(res["units_" + game.characters[id].skin + "_idle_png"]);
         var map = game.engine.area.map;
@@ -121,17 +95,17 @@ var AreaMapLayer = cc.Layer.extend({
             anchorY: 0.25
         });
 
-        if (typeof game.engine.area.spawning_points[n] === "undefined") {
+        /*if (typeof game.engine.area.spawning_points[n] === "undefined") {
             return;
         }
         var spawning_point = game.engine.area.spawning_points[n];
         game.characters[id].x = spawning_point.x;
         game.characters[id].y = spawning_point.y;
-
-        spawning_point.map_pos = map.tilePosToPixelPos(spawning_point.x, spawning_point.y);
-        game.engine.characters[id].sprite.runAction(game.engine.characters[id].actions.idle.se);
-        this.spriteSheet.addChild(game.engine.characters[id].sprite);
-        game.engine.characters[id].sprite.setPosition(cc.p(spawning_point.map_pos.x, spawning_point.map_pos.y));
+        */
+        var p = map.tilePosToPixelPos(game.characters[id].x, game.characters[id].y);
+        game.engine.characters[id].sprite.runAction(game.engine.characters[id].actions.idle.action[game.characters[id].dir]);
+        // this.spriteSheet.addChild(game.engine.characters[id].sprite);
+        game.engine.characters[id].sprite.setPosition(cc.p(p.x, p.y));
     },
 
     initListeners: function () {
@@ -242,6 +216,7 @@ var KeyboardLayer = cc.Layer.extend({
                      cc.log(strTemp);*/
                 },
                 onKeyReleased: function (key, event) {
+                    var id = game.player.selected_character_id;
                     switch (key) {
                         case cc.KEY.num1:
                             cc.log('move player SW');
@@ -251,7 +226,6 @@ var KeyboardLayer = cc.Layer.extend({
                             break;
                         case cc.KEY.num3:
                             cc.log('move player SE');
-                            var id = game.player.selected_character_id;
                             game.engine.fn.characters.moveSE(id);
                             break;
                         case cc.KEY.num4:

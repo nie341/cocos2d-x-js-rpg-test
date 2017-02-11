@@ -36,9 +36,6 @@ var game = {
         characters: {},
         fn: {
             characters: {
-                createSprite: function (id) {
-                    game.engine.characters[id] = new cc.Sprite(res["units_" + game.characters[id].skin + "_idle_png"]);
-                },
                 moveSE: function (char_id) {
                     game.engine.fn.characters.moveInDir(char_id, "se")
                 },
@@ -63,7 +60,7 @@ var game = {
 
                     var tilePositionTarget = map.tilePosToPixelPos(game.characters[id].x, game.characters[id].y);
 
-                    game.engine.characters[id].sprite.runAction(game.engine.characters[id].actions.run[dir]);
+                    game.engine.characters[id].sprite.runAction(game.engine.characters[id].actions.move.action[dir]);
                     var move = cc.moveTo(1.0, cc.p(tilePositionTarget.x, tilePositionTarget.y));
 
                     var seq = cc.sequence(
@@ -71,7 +68,7 @@ var game = {
                         ,cc.callFunc(function () {
                             cc.log('Ended');
                             game.engine.characters[id].sprite.stopAllActions();
-                            game.engine.characters[id].sprite.runAction(game.engine.characters[id].actions.idle[dir]);
+                            game.engine.characters[id].sprite.runAction(game.engine.characters[id].actions.idle.action[dir]);
                         })
                     );
                     game.engine.characters[id].sprite.runAction(seq);
@@ -168,12 +165,13 @@ var game = {
                     for (var i=0;i < chars.length;i++) {
                         var char = chars[i];
                         game.characters[char.id] = char;
+                        game.engine.characters[char.id] = {};
                         game.fn.characters.updateCharSkin(char.id);
-                        if (game.player.game_state === game.rules.player.GAME_STATES.HQ
+                        /*if (game.player.game_state === game.rules.player.GAME_STATES.HQ
                             || game.player.game_state === game.rules.player.GAME_STATES.MISSION)
                         {
-                            game.engine.fn.characters.createSprite(char.id);
-                        }
+                            // game.engine.fn.characters.createSprite(char.id);
+                        }*/
                     }
                 });
             },

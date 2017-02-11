@@ -1,4 +1,5 @@
 var res = {
+    units_sentinel_blue_weapon_alien_plasma_rifle_skin:  "res/units/sentinel_blue/alien_plasma_rifle/skin.json",
     units_sentinel_blue_weapon_alien_plasma_rifle_idle_png:  "res/units/sentinel_blue/alien_plasma_rifle/idle.png",
     units_sentinel_blue_weapon_alien_plasma_rifle_idle_plist:  "res/units/sentinel_blue/alien_plasma_rifle/idle.plist",
     units_sentinel_blue_weapon_alien_plasma_rifle_run_png:   "res/units/sentinel_blue/alien_plasma_rifle/run.png",

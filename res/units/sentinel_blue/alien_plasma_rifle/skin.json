@@ -5,19 +5,13 @@
     "anchorX": 0.5,
     "anchorY": 0.25
   },
-  "sprite_sheets": [
-    "res/units/sentinel_blue/alien_plasma_rifle/idle.png",
-    "res/units/sentinel_blue/alien_plasma_rifle/run.png"
-  ],
-  "plists": [
-    "res/units/sentinel_blue/alien_plasma_rifle/idle.plist",
-    "res/units/sentinel_blue/alien_plasma_rifle/run.plist"
-  ],
   "actions": {
     "idle": {
       "attr": {
         "repeat": false
       },
+      "plist" :"res/units/sentinel_blue/alien_plasma_rifle/idle.plist",
+      "sprite_sheet" :"res/units/sentinel_blue/alien_plasma_rifle/idle.png",
       "frames": {
         "sw": ["idle_sw.png"],
         "s": ["idle_s.png"],
@@ -33,15 +27,59 @@
       "attr": {
         "repeat": true
       },
+      "plist": "res/units/sentinel_blue/alien_plasma_rifle/run.plist",
+      "sprite_sheet": "res/units/sentinel_blue/alien_plasma_rifle/run.png",
       "frames": {
         "sw": [
-          "run_sw.png"
+          "run_sw_0.png",
+          "run_sw_1.png",
+          "run_sw_2.png",
+          "run_sw_3.png",
+          "run_sw_4.png",
+          "run_sw_5.png",
+          "run_sw_6.png",
+          "run_sw_7.png",
+          "run_sw_8.png",
+          "run_sw_9.png",
+          "run_sw_10.png",
+          "run_sw_11.png",
+          "run_sw_12.png",
+          "run_sw_13.png",
+          "run_sw_14.png"
         ],
         "s": [
-          "run_s.png"
+          "run_s_0.png",
+          "run_s_1.png",
+          "run_s_2.png",
+          "run_s_3.png",
+          "run_s_4.png",
+          "run_s_5.png",
+          "run_s_6.png",
+          "run_s_7.png",
+          "run_s_8.png",
+          "run_s_9.png",
+          "run_s_10.png",
+          "run_s_11.png",
+          "run_s_12.png",
+          "run_s_13.png",
+          "run_s_14.png"
         ],
         "se": [
-          "run_se.png"
+          "run_se_0.png",
+          "run_se_1.png",
+          "run_se_2.png",
+          "run_se_3.png",
+          "run_se_4.png",
+          "run_se_5.png",
+          "run_se_6.png",
+          "run_se_7.png",
+          "run_se_8.png",
+          "run_se_9.png",
+          "run_se_10.png",
+          "run_se_11.png",
+          "run_se_12.png",
+          "run_se_13.png",
+          "run_se_14.png"
         ],
         "e": [
           "run_e_0.png",
@@ -61,16 +99,72 @@
           "run_e_14.png"
         ],
         "ne": [
-          "run_ne.png"
+          "run_ne_0.png",
+          "run_ne_1.png",
+          "run_ne_2.png",
+          "run_ne_3.png",
+          "run_ne_4.png",
+          "run_ne_5.png",
+          "run_ne_6.png",
+          "run_ne_7.png",
+          "run_ne_8.png",
+          "run_ne_9.png",
+          "run_ne_10.png",
+          "run_ne_11.png",
+          "run_ne_12.png",
+          "run_ne_13.png",
+          "run_ne_14.png"
         ],
         "n": [
-          "run_n.png"
+          "run_n_0.png",
+          "run_n_1.png",
+          "run_n_2.png",
+          "run_n_3.png",
+          "run_n_4.png",
+          "run_n_5.png",
+          "run_n_6.png",
+          "run_n_7.png",
+          "run_n_8.png",
+          "run_n_9.png",
+          "run_n_10.png",
+          "run_n_11.png",
+          "run_n_12.png",
+          "run_n_13.png",
+          "run_n_14.png"
         ],
         "nw": [
-          "run_nw.png"
+          "run_nw_0.png",
+          "run_nw_1.png",
+          "run_nw_2.png",
+          "run_nw_3.png",
+          "run_nw_4.png",
+          "run_nw_5.png",
+          "run_nw_6.png",
+          "run_nw_7.png",
+          "run_nw_8.png",
+          "run_nw_9.png",
+          "run_nw_10.png",
+          "run_nw_11.png",
+          "run_nw_12.png",
+          "run_nw_13.png",
+          "run_nw_14.png"
         ],
         "w": [
-          "run_w.png"
+          "run_w_0.png",
+          "run_w_1.png",
+          "run_w_2.png",
+          "run_w_3.png",
+          "run_w_4.png",
+          "run_w_5.png",
+          "run_w_6.png",
+          "run_w_7.png",
+          "run_w_8.png",
+          "run_w_9.png",
+          "run_w_10.png",
+          "run_w_11.png",
+          "run_w_12.png",
+          "run_w_13.png",
+          "run_w_14.png"
         ]
       }
     }
