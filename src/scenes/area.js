@@ -32,13 +32,16 @@ var AreaMapLayer = cc.Layer.extend({
     loadMap: function () {
         game.engine.area.map = new cc.TMXTiledMap(res.maps_ships_corvette);
         var map = game.engine.area.map;
-
-        //hide meta layers
-        map.getLayer("CillisionLayer").setVisible(false);
-
-        // this.addChild(map, 0, TAG_TILE_MAP);
         var ms = map.getMapSize();
         var ts = map.getTileSize();
+
+        //hide meta layers
+        var collision_layer = map.getLayer("CollisionLayer");
+        collision_layer.setVisible(false);
+        var hard_map = game.fn.area.getHardMap(collision_layer.getTiles(), ms.width);
+        game.engine.area.matrix = game.fn.area.makeMatrix(collision_layer.getTiles(), ms.width);
+        // cc.log(hard_map);
+
         map.x = 0 - (ms.width * ts.width / 2);
         map.y = 0 - (ms.height * ts.height / 2) ;
 
@@ -131,8 +134,24 @@ var AreaMapLayer = cc.Layer.extend({
 
                     cc.log("Map node position" + map_position.x + ", " + map_position.y);
                     var tilePosition = map.PixelPosToTilePos(map_position.x, map_position.y);
-                    cc.log( tilePosition);
+                    cc.log("Clicked tile: " +  tilePosition.x, tilePosition.y);
+                    cc.log("Selected character position: " +  game.characters[game.player.selected_character_id].x, game.characters[game.player.selected_character_id].y);
 
+                    cc.log(game.engine.area.matrix);
+                    var grid = new PF.Grid(game.engine.area.matrix);
+                    var finder = new PF.AStarFinder({
+                        allowDiagonal: true,
+                        dontCrossCorners: true
+                    });
+                    var path = finder.findPath(
+                        game.characters[game.player.selected_character_id].x,
+                        game.characters[game.player.selected_character_id].y,
+                        tilePosition.x,
+                        tilePosition.y,
+                        grid);
+
+                    game.engine.fn.characters.followPath(path, game.player.selected_character_id);
+                    // console.log(path);
                     // var tt = map.getLayer('FloorLayer').getTileAt(cc.p(tilePosition.x, tilePosition.y));
                     // map.removeChild(tt, true);
                     // cc.log( tt.getTexture() );
@@ -166,22 +185,6 @@ var AreaMapLayer = cc.Layer.extend({
                     }
                 }
             }, this);
-        }
-    },
-
-    getSpawnPoints: function () {
-        var map = game.engine.area.map;
-        var spawn_layer = map.getLayer("SpawnLayer");
-        var tile_gids = spawn_layer.getTiles();
-        var ms = map.getMapSize();
-        var hard_map = game.fn.area.getHardMap(tile_gids, ms.width);
-
-        for (var i=0;i<hard_map.length;i++) {
-            var tile_meta = map.getPropertiesForGID(hard_map[i].gid);
-            if (typeof tile_meta.spawn_point !== "undefined") {
-                var key = parseInt(tile_meta.spawn_point);
-                game.engine.area.spawning_points[key] = hard_map[i];
-            }
         }
     }
 });

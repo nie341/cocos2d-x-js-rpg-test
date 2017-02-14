@@ -12,6 +12,7 @@
     "modules" : ["cocos2d"],
 
     "jsList" : [
+        "src/lib/pathfinding-browser.js",
         "src/resource.js",
         "src/game.js",
         "src/scenes/area.js",

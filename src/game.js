@@ -1,3 +1,4 @@
+var SERVER_URL = "http://hunter.stanislavmalchev.com/remotehost/";
 /**
  * Created by stanislav.malchev on 2/7/2017.
  */
@@ -72,6 +73,50 @@ var game = {
                         })
                     );
                     game.engine.characters[id].sprite.runAction(seq);
+                },
+                followPath: function (path, id) {
+                    var map = game.engine.area.map;
+                    var char = game.characters[id];
+                    char.dir = dir;
+
+                    switch (dir) {
+                        case "e":
+                            game.characters[id].x++;
+                            game.characters[id].y--;
+                            break;
+                        case "se":
+                            game.characters[id].x++;
+                            // game.characters[id].y++;
+                            break;
+                    }
+
+                    console.log(path);
+
+                    var actions = [];
+                    for (var i=0; i<path.length;i++) {
+                        var step = path[i];
+                        var tilePositionTarget = map.tilePosToPixelPos(step[0], step[1]);
+                        var move = cc.moveTo(1.0, cc.p(tilePositionTarget.x, tilePositionTarget.y));
+                        actions.push(move);
+                    }
+
+                    var end = cc.callFunc(function () {
+                        cc.log('Ended');
+                        game.engine.characters[id].sprite.stopAllActions();
+                        game.engine.characters[id].sprite.runAction(game.engine.characters[id].actions.idle.action[dir]);
+                    });
+
+                    actions.push(end);
+                    console.log(actions);
+                    game.characters[id].x = step[0];
+                    game.characters[id].y = step[1];
+                    game.engine.characters[id].sprite.runAction(game.engine.characters[id].actions.move.action[dir]);
+
+                    var seq = cc.sequence(
+                        actions
+
+                    );
+                    game.engine.characters[id].sprite.runAction(seq);
                 }
             }
         }
@@ -87,13 +132,13 @@ var game = {
                 game.fn.player.loadPlayer();
             },
             loadPlayer: function () {
-                var url = "engine/player/load.json";
-                cc.loader.load(url, function(err, results){
+                var url = SERVER_URL + "player/";
+                cc.loader.loadJson(url, function(err, results){
                     if(err){
                         cc.log("Failed to load %s.", url);
                         return;
                     }
-                    game.player = results[0];
+                    game.player = results;
                 });
             }
         },
@@ -102,13 +147,13 @@ var game = {
                 game.fn.area.loadArea();
             },
             loadArea: function () {
-                var url = "engine/area/load.json";
-                cc.loader.load(url, function(err, results){
+                var url = SERVER_URL + "area/";
+                cc.loader.loadJson(url, function(err, results){
                     if(err){
                         cc.log("Failed to load %s.", url);
                         return;
                     }
-                    game.area = results[0];
+                    game.area = results;
                 });
             },
             getHardMap: function (tiles, map_width) {
@@ -129,6 +174,27 @@ var game = {
                     }
                 }
                 return ret;
+            },
+            makeMatrix: function (tiles, map_width) {
+                var ret = [];
+                if (!tiles) {
+                    return ret;
+                }
+                var row = [];
+                var col = 0;
+                for (var i=0;i<tiles.length;i++) {
+                    if (row.length == map_width) {
+                        ret.push(row);
+                        row = [];
+                    }
+
+                    if (tiles[i] !== 0) {
+                        row.push(1);
+                    } else {
+                        row.push(0);
+                    }
+                }
+                return ret;
             }
         },
         items: {
@@ -136,13 +202,13 @@ var game = {
                 game.fn.items.loadItems();
             },
             loadItems: function () {
-                var url = "engine/items/load.json";
-                cc.loader.load(url, function(err, results){
+                var url = SERVER_URL + "items/";
+                cc.loader.loadJson(url, function(err, results){
                     if(err){
                         cc.log("Failed to load %s.", url);
                         return;
                     }
-                    var items = results[0];
+                    var items = results;
                     for (var i=0;i < items.length;i++) {
                         var item = items[i];
                         game.items[item.id] = item;
@@ -155,13 +221,13 @@ var game = {
                 game.fn.characters.loadCharacters();
             },
             loadCharacters: function () {
-                var url = "engine/characters/load.json";
-                cc.loader.load(url, function(err, results){
+                var url = SERVER_URL + "characters/";
+                cc.loader.loadJson(url, function(err, results){
                     if(err){
                         cc.log("Failed to load %s.", url);
                         return;
                     }
-                    var chars = results[0];
+                    var chars = results;
                     for (var i=0;i < chars.length;i++) {
                         var char = chars[i];
                         game.characters[char.id] = char;
